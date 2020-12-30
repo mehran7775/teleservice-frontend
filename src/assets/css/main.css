@@ -1,0 +1,7 @@
+#box{
+  width: 100%;
+  background-color: #42b983;
+  padding: 10px;
+  margin: 10px;
+  border: 1px dotted red;
+}
