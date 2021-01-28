@@ -67,6 +67,7 @@
     background-color: whitesmoke;
     z-index: 4;
     position: fixed;
+    opacity: 0.95;
   }
   #nav {
     width: 60%;

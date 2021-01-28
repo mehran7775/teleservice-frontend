@@ -1,14 +1,17 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import Home from '../components/Home'
-import About from '../components/frontend/About'
-import Register from '../components/frontend/sign_out/Register'
-import Login from '../components/frontend/sign_out/Login'
-import Logout from '../components/frontend/sign_out/Logout'
-import Dashboard from '../components/frontend/dashboard/Dashboard'
-import UserPanel from '../components/frontend/dashboard/UserPanel'
-import Services from '../components/frontend/Services'
-
+import Vue from 'vue';
+import Router from 'vue-router';
+import Home from '../components/Home';
+import About from '../components/frontend/About';
+import Register from '../components/frontend/sign_out/Register';
+import Login from '../components/frontend/sign_out/Login';
+import Logout from '../components/frontend/sign_out/Logout';
+import Dashboard from '../components/frontend/dashboard/Dashboard';
+import UserPanel from '../components/frontend/dashboard/UserPanel';
+import Services from '../components/frontend/Services';
+import CaseShow from '@/components/frontend/cases/CaseShow';
+import CaseUpload from '@/components/frontend/cases/CaseUpload'
+import ReportRegister from '@/components/frontend/cases/ReportRegister'
+import Cases from '@/components/frontend/cases/Cases'
 
 Vue.use(Router)
 
@@ -49,7 +52,7 @@ export default new Router({
           // ]
         },
         {
-          path: 'account/dashboard/:id?with=files',
+          path: 'account/dashboard/:id',
           name: 'userPanel',
           components:{
             userPanel:UserPanel
@@ -65,18 +68,43 @@ export default new Router({
     {
       path: '/services',
       name: 'services',
-      component: Services
+      component: Services,
+      children:[
+        {
+          path:'',
+          name:'cases',
+          components:{
+            default:CaseUpload,
+            casesExpert:Cases
+          }
+        },
+        {
+          path:'case=:id',
+          name:'case-show',
+          components:{
+            caseShow:CaseShow
+          }
+        },
+        {
+          path:'register_report/:id',
+          name:'register-report',
+          components:{
+            reportRegister:ReportRegister
+          }
+        }
+      ]
     },
     // {
     //   path: 'me',
     //   component: Me,
+    // params:true,
     //   children: [
     //     {
     //       path: 'bavar',
     //       component: Bavar,
     //     },
     //     {
-    //       path: 'email',
+    //        path: 'email',
     //       components:{
     //         default:Email,
     //         helper:EmailOne

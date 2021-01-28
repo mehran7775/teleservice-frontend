@@ -17,11 +17,12 @@ export default {
   //   state.successCallbackLogin = payload
   //
   // },
+  // Vue.set(obj, 'newProp', 123)
   change_response_api_home(state,payload){
     state.response_api.home=payload;
   },
-  change_response_api_category(state,payload){
-    state.response_api.category=payload
+  change_response_api_services(state,payload){
+    state.response_api.services=payload
   },
   RESET_STATE(state){
     Object.assign(state,defaultState)
@@ -303,19 +304,20 @@ export default {
     if (payload.user.street){
       state.userDatas.street = payload.user.street
     }
-    // if (payload.name_files){
-    //   if (payload.name_files.meliFile){
-    //     state.userDatas.files.meliFile=payload.name_files.meliFile
-    //   }
-    //   if (payload.name_files.centerFile){
-    //     state.userDatas.files.centerFile=payload.name_files.centerFile
-    //   }
-    //   if (payload.name_files.expertFile){
-    //     state.userDatas.files.expertFile=payload.name_files.expertFile
-    //   }
-    //   if (payload.name_files.madrakFile){
-    //     state.userDatas.files.madrakFile=payload.name_files.madrakFile
-    //   }
+    if(payload.user.avatar){
+      state.userDatas.avatar = payload.user.avatar
+    }
+    // if (payload.user.meliFile){
+    //   state.userDatas.meliFile = payload.user.meliFile
+    // }
+    // if (payload.user.madrakFile){
+    //   state.userDatas.madrakFile = payload.user.madrakFile
+    // }
+    // if (payload.user.centerFile){
+    //   state.userDatas.centerFile = payload.user.centerFile
+    // }
+    // if (payload.user.expertFile){
+    //   state.userDatas.expertFile = payload.user.expertFile
     // }
   },
   initialiseStore(state) {
@@ -365,20 +367,23 @@ export default {
     // this.$store.replaceState(newState)
   },
   SET_PATH_PROFILE (state, payload) {
-    state.userDatas.path_profile = payload
+    state.userDatas.avatar = payload
   },
   SET_ALERT (state, payload) {
     state.alert_success_update.default = true
     state.alert_success_update.value = payload
 
   },
-  GET_CITIES (state,payload){
+  SET_CITIES (state,payload){
     state.cities=payload
   },
   CATEGORIES(state,payload){
       state.categories=payload
   },
   SET_CASES(state,payload){
-    state.cases=payload
-  }
+    state.casses=payload
+  },
+  // SET_CASE(state,payload){
+  //   let casse=state.casses.find(casse =>casse.id==payload.id)
+  // },
 }

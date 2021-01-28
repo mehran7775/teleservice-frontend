@@ -5,10 +5,10 @@ export default {
     regEmail: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
     regPassword: /^[a-zA-Z0-9ضصثقفغعهخحجچپشسیبلاتنمکگظطزرذدئو ]{6,16}$/g,
     reg_meliNumber: /^[0-9]{10}$/g,
-    reg_fullName:/^([ضصثقفغعهخحجچپشسیبلاتنمکگظطزرذدئو]{3,15})[ ]([ضصثقفغعهخحجچپشسیبلاتنمکگظطزرذدئو]{3,15})$/
+    reg_fullName: /^([ضصثقفغعهخحجچپشسیبلاتنمکگظطزرذدئو]{3,15})[ ]([ضصثقفغعهخحجچپشسیبلاتنمکگظطزرذدئو]{3,15})$/
   },
-  userDatas:{
-    id:'',
+  userDatas: {
+    id: '',
     name: '',
     username: '',
     email: '',
@@ -16,69 +16,71 @@ export default {
     role: '',
     city: '',
     street: '',
-    files:{
-      meliFile:'',
-      centerFile:'',
-      expertFile:'',
-      madrakFile:''
-    },
-    avatar:'https://www.extremetech.com/wp-content/uploads/2019/12/SONATA-hero-option1-764A5360-edit-640x354.jpg',
-    completeRegisterClerk:{
+    meliFile: '',
+    centerFile: '',
+    expertFile: '',
+    madrakFile: '',
+    avatar: '',
+    completeRegisterClerk: {
       default: true,
     },
-    completeRegisterExpert:{
+    completeRegisterExpert: {
       default: true,
     },
-    infoClerk:false,
-    infoExpert:false,
-    token:null
+    infoClerk: false,
+    infoExpert: false,
+    token: null
     // token:window.localStorage.getItem('token')
   },
-  cities:{},
-  categories:{},
-  cases:null,
-  response_api:{
-    home:false,
-    category:false,
-    login:{
-      result:false,
-      failed:'',
-      success:'',
-      successCallbackLogin:false
+  cities: {},
+  categories: {},
+  casses: null,
+  // case_details:{
+  //   alert_delete:false
+  // },
+  response_api: {
+    home: false,
+    services: false,
+    category: false,
+    login: {
+      result: false,
+      failed: '',
+      success: '',
+      successCallbackLogin: false
     },
-    register:{
-      result:false,
-      failed:'',
-      success:''
+    register: {
+      result: false,
+      failed: '',
+      success: ''
     },
-    logout:'',
-    dashboard:{
-     default:false,
-      panelUser:false
+    logout: '',
+    dashboard: {
+      default: false,
+      panelUser: false
     }
     // successCallbackRegister: false,
     // successCallbackLogin: false,
   },
   update_data_user: false,
   alerts: {
-    register:{
+    register: {
       default: false,
       value: ''
     },
-    login:{
+    login: {
       default: false,
       value: ''
     },
-    update:{
+    update: {
       default: false,
       value: ''
     },
-    delete:{
+    delete: {
       default: false,
       value: ''
     }
   },
-  validatesRegister:{
+  validatesRegister: {
     isValidated: {
       name: false,
       username: false,
@@ -99,7 +101,7 @@ export default {
       password: ''
     },
   },
-  validatesLogin:{
+  validatesLogin: {
     isValidated: {
       username: false,
       password: false,
@@ -114,7 +116,7 @@ export default {
       password: ''
     },
   },
-  validatesFullRegister:{
+  validatesFullRegister: {
     isValidated: {
       meliNumber: false,
       city: false,
@@ -127,12 +129,12 @@ export default {
     },
     btnStatus: true,
     errorUsers: {
-      meliNumber:'',
-      city:'',
-      street:'',
+      meliNumber: '',
+      city: '',
+      street: '',
     },
   },
-  validatesFullRegisterExpert:{
+  validatesFullRegisterExpert: {
     isValidated: {
       meliNumber: false,
       city: false,
@@ -145,33 +147,33 @@ export default {
     },
     btnStatus: true,
     errorUsers: {
-      meliNumber:'',
-      city:'',
-      street:'',
+      meliNumber: '',
+      city: '',
+      street: '',
     },
   },
-  validatesEdit:{
-    isValidated:{
-      name:false,
-      username:false,
-      meliNumber:false,
-      email:false,
-      street:false
+  validatesEdit: {
+    isValidated: {
+      name: false,
+      username: false,
+      meliNumber: false,
+      email: false,
+      street: false
     },
-    isInvalidated:{
-      name:false,
-      username:false,
-      meliNumber:false,
-      email:false,
-      street:false
+    isInvalidated: {
+      name: false,
+      username: false,
+      meliNumber: false,
+      email: false,
+      street: false
     },
     btnStatus: true,
     errorUsers: {
-      name:'',
-      username:'',
-      meliNumber:'',
-      email:'',
-      street:''
+      name: '',
+      username: '',
+      meliNumber: '',
+      email: '',
+      street: ''
     },
   }
 }

@@ -35,10 +35,29 @@ export default {
   categories:state=>{
     return state.categories
   },
-  cases:state=>{
-    return state.cases
+  casses:(state)=> (id) =>{
+    if(id ==='all'){
+      return state.casses
+    }else{
+      let arr=new Array()
+      state.casses.forEach(function(casse,index){
+        if(casse.category == id){
+          arr[index]=casse
+        }
+      })
+      let newarr=arr.filter(()=>{
+        return true;
+      })
+      let obj=Object.assign({},newarr)
+      return obj;
+    }
+  },
+  caseItem: (state) => (id) => {
+    return state.casses.find(
+      casse => casse.id == id
+    )
+  },
+  case_details:state=>{
+    return state.case_details
   }
-  // mehran:({state,getters,dispatch})=>{
-
-  // }
 }

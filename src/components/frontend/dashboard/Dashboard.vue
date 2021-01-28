@@ -80,7 +80,7 @@
                 <div class="col-6 form-inline">
                   <label for="cityClerk">شهر:</label>
                   <select name="cityClerk" id="cityClerk" class="form-control" v-model="formClerk.city" @change="checkValidate">
-                    <option  :v-for="city in cities" v-text="city" ></option>
+                    <option  v-for="city in cities" v-text="city" ></option>
                   </select>
                 </div>
                 <br>
@@ -170,7 +170,7 @@
                 <div class="col-6 form-inline">
                   <label for="cityExpert">شهر:</label>
                   <select id="cityExpert" class="form-control" v-model="formExpert.city" @change="checkValidate">
-                    <option  :v-for="city in cities" v-text="city" ></option>
+                    <option  v-for="city in cities" v-text="city" ></option>
                   </select>
                 </div>
                 <br>

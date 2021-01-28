@@ -9,10 +9,11 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min.js'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+import { ModalPlugin } from 'bootstrap-vue'
 import Notifications from 'vue-notification'
-
 Vue.config.productionTip = false
-Vue.use(BootstrapVue,Notifications)
+Vue.use(Notifications,BootstrapVue)
+Vue.use(ModalPlugin)
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
@@ -26,3 +27,5 @@ new Vue({
 store.subscribe((mutation, state) => {
   localStorage.setItem('store', JSON.stringify(state));
 });
+
+//setInterval(function, milliseconds, param1, param2, ...)
