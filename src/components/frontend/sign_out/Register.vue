@@ -49,9 +49,9 @@
       </fieldset>
     </form>
   </div>
-  <div class="p-3" v-else>
+  <!-- <div class="p-3" v-else>
     <p class="text-right text-warning">شما در سایت ثبت نام کرده و لاگین کرده اید.</p>
-  </div>
+  </div> -->
 </template>
 
 <script>

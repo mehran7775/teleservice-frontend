@@ -78,10 +78,10 @@ export default {
           let t = this.caseItem.expired_at.split(":", 2);
           this.caseItem.expired_at = t[0] + ":" + t[1];
           let data = {
-            case: this.caseItem,
+            id: this.caseItem.id,
             report: val,
           };
-          this.$store.dispatch("update_case", data);
+          this.$store.dispatch("register_report",data);
         }
       }
     },

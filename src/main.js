@@ -11,6 +11,10 @@ import 'bootstrap/dist/js/bootstrap.min.js'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import { ModalPlugin } from 'bootstrap-vue'
 import Notifications from 'vue-notification'
+import VueAwesomeSwiper from 'vue-awesome-swiper'
+import 'swiper/swiper-bundle.css'
+
+Vue.use(VueAwesomeSwiper, /* { default options with global component } */)
 Vue.config.productionTip = false
 Vue.use(Notifications,BootstrapVue)
 Vue.use(ModalPlugin)

@@ -36,7 +36,9 @@
         :status="item.status"
         :created_at="item.created_at"
         :expired_at="item.expired_at"
+        :cost="item.cost"
         :name_file="item.name"
+        :report="item.report"
       />
     </div>
   </div>

@@ -157,7 +157,7 @@ export default {
         meliNumber: "",
         category: "",
         time: "",
-        caseFile: "",
+        caseFile: ""
       }),
       isValidate: {
         fullNameSick: "",
@@ -251,6 +251,7 @@ export default {
       }
     },
     register() {
+      // let time=new Date().getHours()+':'+new Date().getMinutes()
       this.$store.dispatch("caseUpload", this.formCase);
       this.$bvModal.hide("bv-modal-example");
       //  this.$forceUpdate();
@@ -262,6 +263,7 @@ export default {
 <style scoped>
 .case-upload {
   width: 100%;
+  padding: 2px;
 }
 .title-case-upload {
   width: auto;
@@ -279,5 +281,9 @@ ul li {
   text-align: right;
   padding: 5px;
   box-sizing: border-box;
+}
+input{
+  border: none; /* remove the border so we fake it better */
+  outline: none; /* remove the outline so we fake it better */
 }
 </style>

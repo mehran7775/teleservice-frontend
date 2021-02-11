@@ -4,7 +4,7 @@
     <div class="row mt-4 mt-sm-5">
       <div class="body">
         <div class="back-img">
-          <img src="../../assets/72.jpg" alt="error to uploaded image" />
+          <img src="@/assets/72.jpg" alt="error to uploaded image" />
         </div>
         <div id="content">
           <div class="col-12 bg-white">
@@ -20,15 +20,10 @@
               <div class="col" id="clerk">
                 <transition
                   enter-active-class="animate__animated animate__fadeIn"
-                  leave-active-class="animate__animated animate__fadeOut"
                 >
-                  <router-view name="default" ></router-view>
-                </transition>
-                  <transition
-                  enter-active-class="animate__animated animate__fadeIn"
-                  leave-active-class="animate__animated animate__fadeOut"
-                >
+                  <router-view name="default"></router-view>
                   <router-view name="caseShow"></router-view>
+                  <router-view name="reportShow"></router-view>
                 </transition>
               </div>
             </div>
@@ -42,21 +37,21 @@
               "
             >
               <div class="w-100 p-4">
-                 <transition
+                <transition
                   enter-active-class="animate__animated animate__fadeIn"
-                  leave-active-class="animate__animated animate__fadeOut"
                 >
                   <router-view name="reportRegister"></router-view>
                 </transition>
                 <transition
                   enter-active-class="animate__animated animate__fadeIn"
-                  leave-active-class="animate__animated animate__fadeOut"
+                
                 >
-                  <router-view name="casesExpert" ></router-view>
+                  <router-view name="casesExpert"></router-view>
                 </transition>
               </div>
             </div>
-            <div v-else>برای ارائه خدمت ابتدا درسایت ثبت نام کنید و...</div>
+            <div v-else-if="response_api.login.successCallbackLogin===false">درسایت لاگین کنید و مراحل تکمیل ثبت نام را انجام دهید</div>
+            <div v-else> مراحل تکمیل ثبت نام را انجام دهید</div>
           </div>
         </div>
       </div>

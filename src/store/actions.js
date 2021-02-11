@@ -1,4 +1,3 @@
-import store from './index'
 import Vue from 'vue'
 import ApiService from '../apiService/ApiService'
 import router from '../router'
@@ -347,16 +346,17 @@ export default {
   },
   caseUpload({ commit }, payload) {
     const data = new FormData();
-    data.append('fullNameSick', payload.fullNameSick);
-    data.append('meliNumber', payload.meliNumber);
+    data.append('full_name', payload.fullNameSick);
+    data.append('number_meli', payload.meliNumber);
     data.append('category', payload.category);
     data.append('caseFile', payload.caseFile);
-    data.append('time', payload.time);
+    data.append('expired_at', payload.time);
     ApiService.post('case', data, {
       headers: {
         'Authorization': 'Bearer ' + localStorage.getItem('token')
       }
     }).then(response => {
+      console.log(response)
       Vue.notify({
         group: 'foo',
         type: 'success',
@@ -401,9 +401,6 @@ export default {
     if (payload.case.file) {
       data.append('caseFile', payload.case.file)
     }
-    if (payload.report) {
-      data.append('report', payload.report)
-    }
     data.append('expired_at', payload.case.expired_at);
     data.append('_method', 'put')
     ApiService.post('case/' + payload.case.id, data, {
@@ -416,6 +413,7 @@ export default {
         type: 'success',
         text: response.data.message,
       });
+      this.dispatch('back');
     }).catch(error => {
       console.log(error.response)
     })
@@ -463,4 +461,73 @@ export default {
       console.log(error)
     })
   },
+  register_report({commit},payload){
+    const data = new FormData();
+    data.append('report', payload.report);
+    data.append('id', payload.id);
+    ApiService.post('report',data,{
+      headers:{
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
+      }
+    }).then(response=>{
+      console.log(response)
+        Vue.notify({
+          group: 'foo',
+          type: 'success',
+          text: response.data.message,
+        });
+        this.dispatch('back');
+    }).catch(error=>{
+      console.log(error);
+    })
+  },
+  verify_report({commit},payload){
+    const data=new FormData;
+    data.append('id',payload);
+    ApiService.post('verifyReport',data,{
+      headers:{
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
+      }
+    }).then(response=>{
+      console.log(response);
+      Vue.notify({
+        group: 'foo',
+        type: 'success',
+        text: response.data.message,
+      });
+      this.dispatch('back');
+    }).catch(error=>{
+      console.log(error)
+    })
+  },
+  dont_verify_report({commit},payload){
+    const data=new FormData;
+    data.append('id',payload);
+    ApiService.post('dontVerifyReport',data,{
+      headers:{
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
+      }
+    }).then(response=>{
+      // console.log(response);
+      Vue.notify({
+        group: 'foo',
+        type: 'success',
+        text: response.data.message,
+      });
+      this.dispatch('back');
+    }).catch(error=>{
+      console.log(error)
+    })
+  },
+  get_wallet({commit}){
+    ApiService.get('wallet',{
+      headers:{
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
+      }
+    }).then(response=>{
+      commit('SET_WALLET',response.data.wallet)
+    }).catch(error=>{
+      console.log(error)
+    })
+  }
 }

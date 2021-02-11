@@ -21,6 +21,7 @@ export default {
     expertFile: '',
     madrakFile: '',
     avatar: '',
+    wallet:0,
     completeRegisterClerk: {
       default: true,
     },

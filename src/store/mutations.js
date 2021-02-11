@@ -133,54 +133,15 @@ export default {
         break
       }
       case 'okUsernameLogin':{
-        state.validatesLogin.isValidated.username=true
-        state.validatesLogin.isInvalidated.username=false
         state.validatesLogin.errorUsers.username=''
         state.response_api.login.failed=false
         break
       }
-      case 'falseUsernameLogin':{
-        state.validatesLogin.isValidated.username=false
-        state.validatesLogin.isInvalidated.username=true
-        break
-      }
       case 'okPasswordLogin':{
-        state.validatesLogin.isValidated.password=true
-        state.validatesLogin.isInvalidated.password=false
         state.validatesLogin.errorUsers.password=''
         state.response_api.login.failed=false
         break
       }
-      case 'falsePasswordLogin':{
-        state.validatesLogin.isValidated.password=false
-        state.validatesLogin.isInvalidated.password=true
-         break
-      }
-      //
-      // case payload.name:{
-      //   state.validatesRegister.isValidated.name = false
-      //   state.validatesRegister.isInvalidated.name = true
-      //   state.validatesRegister.errorUsers.name = payload.name.toString()
-      //   break
-      // }
-      // case payload.username:{
-      //   state.validatesRegister.isValidated.username = false
-      //   state.validatesRegister.isInvalidated.username = true
-      //   state.validatesRegister.errorUsers.username = payload.username.toString()
-      //   break
-      // }
-      // case payload.email:{
-      //   state.validatesRegister.isValidated.email = false
-      //   state.validatesRegister.isInvalidated.email = true
-      //   state.validatesRegister.errorUsers.email = payload.email.toString()
-      //   break
-      // }
-      // case payload.password:{
-      //   state.validatesRegister.isValidated.password = false
-      //   state.validatesRegister.isInvalidated.password = true
-      //   state.validatesRegister.errorUsers.password = payload.password.toString()
-      //   break
-      // }
       //fullRegister
       case 'trueMeliNumberClerk':{
         state.validatesFullRegister.isValidated.meliNumber=true
@@ -287,7 +248,6 @@ export default {
     }
   },
   SELECT_DATA_USER (state, payload) {
-    console.log(payload.user)
     state.userDatas.id = payload.user.id
     state.userDatas.name = payload.user.name
     state.userDatas.username = payload.user.username
@@ -383,6 +343,9 @@ export default {
   SET_CASES(state,payload){
     state.casses=payload
   },
+  SET_WALLET(state,payload){
+    state.userDatas.wallet=payload
+  }
   // SET_CASE(state,payload){
   //   let casse=state.casses.find(casse =>casse.id==payload.id)
   // },

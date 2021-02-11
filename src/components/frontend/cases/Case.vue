@@ -1,9 +1,6 @@
 <template>
-  <div :class="[status === 1 ? 'study' : 'notStudy', 'case']">
-    <transition
-      enter-active-class="animate__animated animate__fadeIn"
-      leave-active-class="animate__animated animate__fadeOut"
-    >
+  <div :class="[(report && status===0) ? 'study' : (report && status===1) ? 'end':'notStudy', 'case overflow-hidden']">
+    <transition enter-active-class="animate__animated animate__fadeIn">
       <div v-if="delete_case">
         <div class="text-right p-2">
           <span>آیا میخواهید این مورد را حذف کنید؟</span>
@@ -18,68 +15,80 @@
         </div>
       </div>
     </transition>
-    <transition
-      enter-active-class="animate__animated animate__fadeIn"
-      leave-active-class="animate__animated animate__fadeOut"
-    >
-       <div v-if="!delete_case">
-      <div
-        id="edit_delete"
-        @mouseover="dropdown()"
-        @mouseleave="hideDropDown()"
-      >
-        <div class="d-flex justify-content-center">
-          <img src="@/assets/images/icons/arrow-216-24.png" alt="" />
-        </div>
-        <div class="dropDown" v-if="showDropDown && userDatas.role == 'clerk'">
-          <ul>
-            <li @click="caseShow(id)">ویرایش</li>
-            <li @click="alert_remove()">حذف</li>
-          </ul>
-        </div>
+    <transition enter-active-class="animate__animated animate__fadeIn">
+      <div v-if="!delete_case">
         <div
-          class="dropDown"
-          v-if="showDropDown && userDatas.role === 'expert'"
+          id="edit_delete"
+          @mouseover="dropdown()"
+          @mouseleave="hideDropDown()"
         >
-          <ul>
-            <li @click="download()">دانلود</li>
-            <!-- <li @click="Delete()">حذف</li> -->
-            <li @click="register_report(id)">ثبت گزارش</li>
-          </ul>
+          <div class="d-flex justify-content-center">
+            <img src="@/assets/images/icons/arrow-216-24.png" alt="" />
+          </div>
+          <div
+            class="dropDown"
+            v-if="showDropDown && userDatas.role == 'clerk'"
+          >
+            <ul>
+              <li :class="[status===1 ? 'disabled': null]" @click="caseShow(id)">ویرایش</li>
+              <li @click="alert_remove()">حذف</li>
+              <li :class="[status===1 ? 'disabled': null]" v-if="report" @click="reportShow(id)">استعلام گزارش</li>
+            </ul>
+          </div>
+          <div
+            class="dropDown"
+            v-if="showDropDown && userDatas.role === 'expert'"
+          >
+            <ul>
+              <li @click="download()">دانلود</li>
+              <!-- <li @click="Delete()">حذف</li> -->
+              <li :class="[report ? 'disabled' : null]" @click="register_report(id)">ثبت گزارش</li>
+            </ul>
+          </div>
         </div>
-      </div>
-      <div class="d-flex flex-column w-100 h-100">
-        <div :class="[report ? 'h-75' : 'h-100']">
-          <ul class="info">
-            <li>
-              نام بیمار:
-              <span v-text="name"></span>
-            </li>
-            <li>
-              کدملی بیمار:
-              <span v-text="meliNumber"></span>
-            </li>
-            <li>
-              حوزه تخصص:
-              <span v-text="category"></span>
-            </li>
-            <!-- <li>زمان ثبت:
+        <div class="d-flex flex-column w-100">
+          <div >
+            <ul class="info">
+              <li>
+                نام بیمار:
+                <span v-text="name"></span>
+              </li>
+              <li>
+                کدملی بیمار:
+                <span v-text="meliNumber"></span>
+              </li>
+              <li>
+                حوزه تخصص:
+                <span v-text="category"></span>
+              </li>
+              <!-- <li>زمان ثبت:
                 <span v-text="created_at"></span>
             </li> -->
-            <li>
-              تا ساعت:
-              <span v-text="expired_at"></span>
-            </li>
-            <li>
-              حالت:
-              <span v-if="status === 0" v-text="'بررسی نشده است'"></span>
-              <span v-else v-text="'بررسی شده است'"></span>
-            </li>
-          </ul>
+              <li>
+                تا ساعت:
+                <span v-text="expired_at"></span>
+              </li>
+              <li>
+                قیمت:
+                <span v-text="cost + ' تومان'"></span>
+              </li>
+              <li>
+                حالت:
+                <span v-if="!report" v-text="'بررسی نشده'"></span>
+                <span v-else-if="report && status===0" v-text="'تعویق'"></span>
+                <span v-else-if="status===1" v-text="'بررسی شده'"></span>
+              </li>
+              <li v-if="report && userDatas.role==='clerk'">
+                گزارش:
+                <span v-text="report"></span>
+              </li>
+            </ul>
+          </div>
+          <!-- <div v-if="report" v-text="report">
+
+          </div> -->
         </div>
-        <div v-if="report" class="w-100 h-25 bg-danger">65464</div>
       </div>
-    </div>ّ
     </transition>
   </div>
 </template>
@@ -96,7 +105,8 @@ export default {
     expired_at: "",
     created_at: "",
     report: "",
-     name_file:""
+    name_file: "",
+    cost:""
   },
   // props: [
   //   "id",
@@ -120,6 +130,9 @@ export default {
     caseShow(id) {
       this.$router.push({ name: "case-show", params: { id: id } });
     },
+    reportShow(id){
+      this.$router.push({name:"report-show",params:{id:id}});
+    },
     dropdown() {
       this.showDropDown = true;
     },
@@ -131,15 +144,15 @@ export default {
       // this.$store.commit('ALER_DELETE_CASE',this.delete_case)
     },
     remove(id) {
-      let x=this.$store.dispatch('remove_case',id);
-      this.delete_case=!x
+      let x = this.$store.dispatch("remove_case", id);
+      this.delete_case = !x;
     },
-    download(){
-     this.$store.dispatch('download',this.name_file)
+    download() {
+      this.$store.dispatch("download", this.name_file);
     },
-    register_report(id){
-      this.$router.push({name:'register-report',params:{id:id}})
-    }
+    register_report(id) {
+      this.$router.push({ name: "register-report", params: { id: id } });
+    },
   },
   computed: {
     userDatas() {
@@ -151,8 +164,9 @@ export default {
 <style lang="css" scoped>
 .case {
   width: 180px;
+  height:300px;
   border-radius: 8px;
-  margin-top: 1%;
+  margin-top: 3%;
   margin-bottom: 1%;
   cursor: pointer;
   opacity: 0.95;
@@ -175,12 +189,16 @@ export default {
   width: 100%;
 }
 .study {
-  background-color: rgb(123, 154, 155);
-  box-shadow: 1px 1px 1px rgb(122, 156, 144);
+  background-color: #fde5a3;
+  box-shadow: 1px 1px 1px rgb(216, 190, 119);
 }
 .notStudy {
   background-color: rgb(202, 152, 169);
   box-shadow: 1px 1px 1px rgb(207, 143, 143);
+}
+.end{
+   background-color: rgb(155, 207, 125);
+    box-shadow: 1px 1px 1px rgb(138, 184, 111);
 }
 #edit_delete {
   position: inherit;
@@ -192,9 +210,6 @@ export default {
   border-radius: 10%;
   overflow: hidden;
   text-align: right;
-}
-.dropDown {
-  box-shadow: 1px 0 1px 1px #c77a9f;
 }
 .dropDown ul li:hover {
   font-weight: bold;
@@ -214,8 +229,12 @@ export default {
   font-weight: bold;
   transform: translateY(-2px);
 }
-ul li{
- list-style: none;
+ul li {
+  list-style: none;
+}
+.disabled {
+    pointer-events:none;
+    opacity:0.6;
 }
 /* .h {
   height: 10%;
