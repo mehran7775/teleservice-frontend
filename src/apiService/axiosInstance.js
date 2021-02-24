@@ -1,6 +1,7 @@
 import axios from 'axios'
 const instance = axios.create({
   // baseURL: 'http://teleservice.esmaeelrezaee.ir/core/api'
+  // baseURL: '/core/api'
   baseURL: 'http://localhost:8000/api'
 });
 // instance.interceptors.response.use(

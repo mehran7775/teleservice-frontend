@@ -18,6 +18,7 @@ import Wallet from '@/components/frontend/Wallet'
 Vue.use(Router)
 
 export default new Router({
+  // mode:'history',
   routes: [
     {
       path: '/',
@@ -60,11 +61,6 @@ export default new Router({
             userPanel: UserPanel
           }
         },
-        {
-          path:'wallet',
-          name:'wallet',
-          component:Wallet
-        }
       ]
     },
     {
@@ -108,6 +104,11 @@ export default new Router({
         },
       ]
     },
+    {
+      path:'/wallet',
+      name:'wallet',
+      component:Wallet
+    }
     // {
     //   path: 'me',
     //   component: Me,

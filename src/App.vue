@@ -2,8 +2,6 @@
   <div id="app">
     <PageLoader :is-loaded="response_api.home" />
     <notifications group="foo" />
-    <!--    <transition enter-active-class="animate__animated animate__fadeInDown" leave-active-class="fadeOutDown" >-->
-    <!--    </transition>-->
     <transition enter-active-class="animate__animated animate__fadeIn">
       <router-view></router-view>
     </transition>

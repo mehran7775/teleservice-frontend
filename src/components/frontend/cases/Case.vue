@@ -32,6 +32,7 @@
             <ul>
               <li :class="[status===1 ? 'disabled': null]" @click="caseShow(id)">ویرایش</li>
               <li @click="alert_remove()">حذف</li>
+              <li @click="download()">دانلود</li>
               <li :class="[status===1 ? 'disabled': null]" v-if="report" @click="reportShow(id)">استعلام گزارش</li>
             </ul>
           </div>

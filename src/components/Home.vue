@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid" v-if="response_api.home">
+  <div class="container-fluid">
     <Header></Header>
     <div class="row mt-4 mt-sm-5">
       <div class="body">
@@ -77,7 +77,7 @@ import Slide from "@/components/frontend/slider/Slide";
 import Slider from '@/components/frontend/slider/Slider'
 export default {
   name: "Home",
-  components: { Header, Footer, Register, Login, Slide,Slider },
+  components: { Header, Footer, Register, Login, Slide,Slider},
   data() {
     return {
       newLink: "",

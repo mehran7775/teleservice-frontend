@@ -1,5 +1,5 @@
 ا<template>
-  <div class="container-fluid" v-if="response_api.services">
+  <div class="container-fluid">
     <Header></Header>
     <div class="row mt-4 mt-sm-5">
       <div class="body">

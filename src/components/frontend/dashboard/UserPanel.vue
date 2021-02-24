@@ -77,6 +77,7 @@
                       <label for="nameClerk">نام:</label>
                       <input
                         id="nameClerk"
+                        maxLength="15"
                         type="text"
                         :class="[
                           validates.isInvalidated.name ? 'is-invalid' : null,
@@ -93,6 +94,7 @@
                       <label for="usernameClerk">نام کاربری:</label>
                       <input
                         type="text"
+                        maxlength="15"
                         :class="[
                           validates.isInvalidated.username
                             ? 'is-invalid'
@@ -116,6 +118,7 @@
                       <label for="emailClerk">ایمیل:</label>
                       <input
                         type="email"
+                        maxlength="25"
                         :class="[
                           validates.isInvalidated.email ? 'is-invalid' : null,
                           validates.isValidated.email ? 'is-valid' : null,
@@ -135,6 +138,7 @@
                       <label for="meliNumberClerk">کدملی:</label>
                       <input
                         id="meliNumberClerk"
+                        maxlength="10"
                         type="text"
                         :class="[
                           validates.isInvalidated.meliNumber
@@ -218,6 +222,7 @@
                       <label for="streetClerk">خیابان:</label>
                       <input
                         type="text"
+                        maxlength="20"
                         id="streetClerk"
                         :class="[
                           validates.isInvalidated.street ? 'is-invalid' : null,
@@ -332,6 +337,7 @@
                       <label for="nameExpert">نام:</label>
                       <input
                         id="nameExpert"
+                         maxLength="15"
                         type="text"
                         :class="[
                           validates.isInvalidated.name ? 'is-invalid' : null,
@@ -348,6 +354,7 @@
                       <label for="usernameExpert">نام کاربری:</label>
                       <input
                         type="text"
+                         maxLength="15"
                         :class="[
                           validates.isInvalidated.username
                             ? 'is-invalid'
@@ -379,6 +386,7 @@
                         id="emailExpert"
                         name="emailExpert"
                         ref="emailExpert"
+                         maxLength="25"
                         v-model="userDatas.email"
                         @input="validateExpert(userDatas.email, 'emailExpert')"
                       />
@@ -390,6 +398,7 @@
                       <label for="meliNumberExpert">کدملی:</label>
                       <input
                         id="meliNumberExpert"
+                         maxLength="10"
                         type="text"
                         :class="[
                           validates.isInvalidated.meliNumber
@@ -466,6 +475,7 @@
                           validates.isValidated.street ? 'is-valid' : null,
                           'form-control w-50 mr-2',
                         ]"
+                         maxLength="20"
                         v-model="userDatas.street"
                         ref="streetExpert"
                         @input="

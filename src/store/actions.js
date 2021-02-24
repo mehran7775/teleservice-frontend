@@ -3,14 +3,13 @@ import ApiService from '../apiService/ApiService'
 import router from '../router'
 import { resetState } from './index'
 import Notifications from 'vue-notification'
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
 Vue.use(Notifications);
+Vue.use(Loading);
 export default {
   get_home({ commit }) {
-    ApiService.get('/', {
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    })
+    ApiService.get('/')
       .then(response => {
         if (response.data.result === true && response.status === 200) {
           commit('change_response_api_home', response.data.result);
@@ -29,7 +28,6 @@ export default {
   getRegister({ commit }) {
     ApiService.get('account/register', {
       headers: {
-        'Content-Type': 'application/json',
         'X-Request-With': 'XMLHttpRequest'
       }
     })
@@ -47,13 +45,25 @@ export default {
     commit('changeValidate', payload)
   },
   register({ commit }, form) {
+    let loader = Vue.$loading.show({
+      container: null,
+      canCancel: false,
+      onCancel: this.yourCallbackMethod,
+      color: "#000000",
+      loader: "spinner",
+      width: 64,
+      height: 64,
+      backgroundColor: "#C0C0C1",
+      opacity: 0.5,
+      zIndex: 999,
+    });
     ApiService.post('account/register', form, {
       headers: {
-        'Content-Type': 'application/json',
         'X-Request-With': 'XMLHttpRequest'
       }
     })
       .then(response => {
+        loader.hide();
         if (response.data.success && response.status === 201) {
           console.log(response)
           Vue.notify({
@@ -65,13 +75,13 @@ export default {
         }
       })
       .catch(error => {
+        loader.hide();
         commit('changeValidate', error.response.data.errors)
       })
   },
   getLogin({ commit }) {
     const error = ApiService.get('account/login', {
       headers: {
-        'Content-Type': 'application/json',
         'X-Request-With': 'XMLHttpRequest'
       }
     })
@@ -86,15 +96,40 @@ export default {
   reset_data_component_login({ commit }) {
     commit('RESET_DATA_COMPONENT_LOGIN')
   },
+  send_code_to_email({commit},payload){
+    let email=new FormData();
+    email.append('email',payload);
+    ApiService.post('account/loginWithEmail',email,{
+      headers: {
+        'X-Request-With': 'XMLHttpRequest'
+      }
+    }).then(response=>{
+      console.log(response)
+    }).catch(error=>{
+      console.log(error)
+    })
+  },
   login({ commit }, form) {
+    let loader = Vue.$loading.show({
+      container: null,
+      canCancel: false,
+      onCancel: this.yourCallbackMethod,
+      color: "#000000",
+      loader: "spinner",
+      width: 64,
+      height: 64,
+      backgroundColor: "#C0C0C1",
+      opacity: 0.5,
+      zIndex: 999,
+    });
     ApiService.post('account/login', form, {
       headers: {
-        'Content-Type': 'application/json',
         'X-Request-With': 'XMLHttpRequest'
       }
     })
       .then(response => {
         if (response.status === 200 && response.data.success) {
+          loader.hide();
           localStorage.setItem('token', response.data.token)
           commit('SELECT_DATA_USER', response.data)
           Vue.notify({
@@ -102,7 +137,7 @@ export default {
             type: 'success',
             text: response.data.success,
           })
-          let date = new Date()
+          let date = new Date();
           let expired_date = date.setHours(date.getHours() + 4)
           localStorage.setItem('user_date_expired_at', expired_date)
           commit('change_response_api_login', response.data)
@@ -111,13 +146,14 @@ export default {
         // console.log(response.data.failed)
       })
       .catch(error => {
+        loader.hide();
+        console.log(error.response)
         commit('change_response_api_login', error.response.data)
       })
   },
   logout({ commit }) {
     ApiService.post('account/logOut', null, {
       headers: {
-        'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + localStorage.getItem('token')
       }
     })
@@ -141,7 +177,6 @@ export default {
   getDashboard({ commit }) {
     ApiService.get('account/dashboard', {
       headers: {
-        'Content-Type': 'application/json',
         'X-Request-With': 'XMLHttpRequest',
         'Authorization': 'Bearer ' + localStorage.getItem('token')
       }
@@ -157,6 +192,18 @@ export default {
       )
   },
   fullRegisterClerk({ commit }, user) {
+    let loader = Vue.$loading.show({
+      container: null,
+      canCancel: false,
+      onCancel: this.yourCallbackMethod,
+      color: "#000000",
+      loader: "spinner",
+      width: 64,
+      height: 64,
+      backgroundColor: "#C0C0C1",
+      opacity: 0.5,
+      zIndex: 999,
+    });
     let formClerk = new FormData();
     formClerk.append('meliNumber', user.meliNumber);
     formClerk.append('meliFile', user.meliFile);
@@ -171,6 +218,8 @@ export default {
       }
     })
       .then(response => {
+        loader.hide();
+        // console.log(response)
         let data = {
           id: response.data.id,
         }
@@ -178,10 +227,23 @@ export default {
         commit('change_response_api_dashboard', 'trueUserPanel')
         router.replace({ name: 'userPanel', params: { id: response.data.id } })
       }).catch(error => {
+        loader.hide();
         console.log(error.response)
       })
   },
   fullRegisterExpert({ commit }, userExpert) {
+    let loader = Vue.$loading.show({
+      container: null,
+      canCancel: false,
+      onCancel: this.yourCallbackMethod,
+      color: "#000000",
+      loader: "spinner",
+      width: 64,
+      height: 64,
+      backgroundColor: "#C0C0C1",
+      opacity: 0.5,
+      zIndex: 999,
+    });
     let formExpert = new FormData();
     formExpert.append('meliNumber', userExpert.meliNumber)
     formExpert.append('meliFile', userExpert.meliFile)
@@ -195,6 +257,7 @@ export default {
       }
     })
       .then(response => {
+        loader.hide();
         let data = {
           id: response.data.id
         }
@@ -203,18 +266,17 @@ export default {
         router.replace({ name: 'userPanel', params: { id: response.data.id } })
         // commit('SET_ALERT', response.data.message)
       }).catch(error => {
+        loader.hide();
         console.log(error.response)
       })
   },
   showDashboard({ commit }, data) {
     ApiService.get('account/dashboard/' + data.id, {
       headers: {
-        'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + localStorage.getItem('token')
       }
     })
       .then(response => {
-        console.log(response)
         let item = {
           user: response.data.user,
         }
@@ -224,6 +286,18 @@ export default {
       })
   },
   setProfile({ commit }, pic) {
+    let loader = Vue.$loading.show({
+      container: null,
+      canCancel: true,
+      onCancel: this.yourCallbackMethod,
+      color: "#000000",
+      loader: "spinner",
+      width: 64,
+      height: 64,
+      backgroundColor: "#C0C0C1",
+      opacity: 0.5,
+      zIndex: 999,
+    });
     let picture = new FormData()
     picture.append('profile', pic)
     ApiService.post('account/profile', picture, {
@@ -232,6 +306,7 @@ export default {
       }
     })
       .then(response => {
+        loader.hide();
         console.log(response.data)
         Vue.notify({
           group: 'foo',
@@ -240,6 +315,7 @@ export default {
         });
         this.dispatch('getProfile', response.data.name_profile)
       }).catch(error => {
+        loader.hide();
         console.log(error)
       })
   },
@@ -257,6 +333,18 @@ export default {
       })
   },
   updateProfile({ commit }, payload) {
+    let loader = Vue.$loading.show({
+      container: null,
+      canCancel: true,
+      onCancel: this.yourCallbackMethod,
+      color: "#000000",
+      loader: "spinner",
+      width: 64,
+      height: 64,
+      backgroundColor: "#C0C0C1",
+      opacity: 0.5,
+      zIndex: 999,
+    });
     let data = new FormData
     console.log(payload.name)
     data.append('_method', 'put')
@@ -267,8 +355,10 @@ export default {
       }
     })
       .then(response => {
+        loader.hide();
         this.dispatch('getProfile', response.data.name_profile)
       }).catch(error => {
+        loader.hide();
         console.log(error)
       })
   },
@@ -276,8 +366,19 @@ export default {
     commit('RESET_STATE_DATA')
   },
   update_user({ commit }, payload) {
+    let loader = Vue.$loading.show({
+      container: null,
+      canCancel: false,
+      onCancel: this.yourCallbackMethod,
+      color: "#000000",
+      loader: "spinner",
+      width: 64,
+      height: 64,
+      backgroundColor: "#C0C0C1",
+      opacity: 0.5,
+      zIndex: 999,
+    });
     let user = payload.user
-    console.log(payload)
     let formData = new FormData()
     formData.append('name', user.name)
     formData.append('username', user.username)
@@ -301,22 +402,21 @@ export default {
     ApiService.post('account/dashboard/' + payload.id, formData
       , {
         headers: {
-          'Content-Type': 'application/json',
           'X-Request-With': 'XMLHttpRequest',
           'Authorization': 'Bearer ' + localStorage.getItem('token')
         }
       }).then(response => {
-        console.log(response)
+        loader.hide();
         this.dispatch('showDashboard', payload)
         commit('change_alerts', response.data.message)
       }).catch(error => {
+        loader.hide();
         console.log(error)
       })
   },
   get_cities({ commit }) {
     ApiService.get('cities', {
       headers: {
-        'Content-Type': 'application/json',
         'X-Request-With': 'XMLHttpRequest'
       }
     })
@@ -345,6 +445,18 @@ export default {
     })
   },
   caseUpload({ commit }, payload) {
+    let loader = Vue.$loading.show({
+      container: null,
+      canCancel: false,
+      onCancel: this.yourCallbackMethod,
+      color: "#000000",
+      loader: "spinner",
+      width: 64,
+      height: 64,
+      backgroundColor: "#C0C0C1",
+      opacity: 0.5,
+      zIndex: 999,
+    });
     const data = new FormData();
     data.append('full_name', payload.fullNameSick);
     data.append('number_meli', payload.meliNumber);
@@ -356,7 +468,7 @@ export default {
         'Authorization': 'Bearer ' + localStorage.getItem('token')
       }
     }).then(response => {
-      console.log(response)
+      loader.hide();
       Vue.notify({
         group: 'foo',
         type: 'success',
@@ -364,13 +476,13 @@ export default {
       });
       this.dispatch('get_casses');
     }).catch(error => {
+      loader.hide();
       console.log(error.response)
     })
   },
   get_categories({ commit }) {
     ApiService.get('categories', {
       headers: {
-        'Content-Type': 'application/json',
         'Accept': 'application/json'
       }
     }).then(response => {
@@ -382,7 +494,6 @@ export default {
   get_casses({ commit }) {
     ApiService.get('case', {
       headers: {
-        'Accept': 'application/json',
         'Authorization': 'Bearer ' + localStorage.getItem('token')
       }
     }).then(response => {
@@ -394,6 +505,18 @@ export default {
     })
   },
   update_case({ commit }, payload) {
+    let loader = Vue.$loading.show({
+      container: null,
+      canCancel: false,
+      onCancel: this.yourCallbackMethod,
+      color: "#000000",
+      loader: "spinner",
+      width: 64,
+      height: 64,
+      backgroundColor: "#C0C0C1",
+      opacity: 0.5,
+      zIndex: 999,
+    });
     const data = new FormData();
     data.append('full_name', payload.case.fullNameSick);
     data.append('number_meli', payload.case.meliNumber);
@@ -408,6 +531,7 @@ export default {
         'Authorization': 'Bearer ' + localStorage.getItem('token')
       }
     }).then(response => {
+      loader.hide();
       Vue.notify({
         group: 'foo',
         type: 'success',
@@ -415,6 +539,7 @@ export default {
       });
       this.dispatch('back');
     }).catch(error => {
+      loader.hide();
       console.log(error.response)
     })
   },
@@ -454,79 +579,119 @@ export default {
       const link = document.createElement('a');
       link.href = url;
       let r = Math.random().toString(20).substring(2);
-      link.setAttribute('download', 'file-case-'+r+'.pdf');
+      link.setAttribute('download', 'file-case-' + r + '.pdf');
       document.body.appendChild(link);
       link.click();
     }).catch(error => {
       console.log(error)
     })
   },
-  register_report({commit},payload){
+  register_report({ commit }, payload) {
+    let loader = Vue.$loading.show({
+      container: null,
+      canCancel: false,
+      onCancel: this.yourCallbackMethod,
+      color: "#000000",
+      loader: "spinner",
+      width: 64,
+      height: 64,
+      backgroundColor: "#C0C0C1",
+      opacity: 0.5,
+      zIndex: 999,
+    });
     const data = new FormData();
     data.append('report', payload.report);
     data.append('id', payload.id);
-    ApiService.post('report',data,{
-      headers:{
+    ApiService.post('report', data, {
+      headers: {
         'Authorization': 'Bearer ' + localStorage.getItem('token')
       }
-    }).then(response=>{
-      console.log(response)
-        Vue.notify({
-          group: 'foo',
-          type: 'success',
-          text: response.data.message,
-        });
-        this.dispatch('back');
-    }).catch(error=>{
+    }).then(response => {
+      loader.hide();
+      Vue.notify({
+        group: 'foo',
+        type: 'success',
+        text: response.data.message,
+      });
+      this.dispatch('back');
+    }).catch(error => {
+      loader.hide();
       console.log(error);
     })
   },
-  verify_report({commit},payload){
-    const data=new FormData;
-    data.append('id',payload);
-    ApiService.post('verifyReport',data,{
-      headers:{
+  verify_report({ commit }, payload) {
+    let loader = Vue.$loading.show({
+      container: null,
+      canCancel: false,
+      onCancel: this.yourCallbackMethod,
+      color: "#000000",
+      loader: "spinner",
+      width: 64,
+      height: 64,
+      backgroundColor: "#C0C0C1",
+      opacity: 0.5,
+      zIndex: 999,
+    });
+    const data = new FormData;
+    data.append('id', payload);
+    ApiService.post('verifyReport', data, {
+      headers: {
         'Authorization': 'Bearer ' + localStorage.getItem('token')
       }
-    }).then(response=>{
-      console.log(response);
+    }).then(response => {
+      loader.hide();
       Vue.notify({
         group: 'foo',
         type: 'success',
         text: response.data.message,
       });
       this.dispatch('back');
-    }).catch(error=>{
+    }).catch(error => {
+      loader.hide();
       console.log(error)
     })
   },
-  dont_verify_report({commit},payload){
-    const data=new FormData;
-    data.append('id',payload);
-    ApiService.post('dontVerifyReport',data,{
-      headers:{
+  dont_verify_report({ commit }, payload) {
+    let loader = Vue.$loading.show({
+      container: null,
+      canCancel: false,
+      onCancel: this.yourCallbackMethod,
+      color: "#000000",
+      loader: "spinner",
+      width: 64,
+      height: 64,
+      backgroundColor: "#C0C0C1",
+      opacity: 0.5,
+      zIndex: 999,
+    });
+    const data = new FormData;
+    data.append('id', payload);
+    ApiService.post('dontVerifyReport', data, {
+      headers: {
         'Authorization': 'Bearer ' + localStorage.getItem('token')
       }
-    }).then(response=>{
-      // console.log(response);
+    }).then(response => {
+      loader.hide();
+      // console.log;(response);
       Vue.notify({
         group: 'foo',
         type: 'success',
         text: response.data.message,
       });
       this.dispatch('back');
-    }).catch(error=>{
+    }).catch(error => {
+      loader.hide();
       console.log(error)
     })
   },
-  get_wallet({commit}){
-    ApiService.get('wallet',{
-      headers:{
+  get_wallet({ commit }) {
+    ApiService.get('wallet', {
+      headers: {
         'Authorization': 'Bearer ' + localStorage.getItem('token')
       }
-    }).then(response=>{
-      commit('SET_WALLET',response.data.wallet)
-    }).catch(error=>{
+    }).then(response => {
+      commit('SET_WALLET', response.data.wallet)
+    }).catch(error => {
       console.log(error)
     })
   }

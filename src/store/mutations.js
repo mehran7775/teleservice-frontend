@@ -132,8 +132,8 @@ export default {
         state.validatesRegister.isInvalidated.password=true
         break
       }
-      case 'okUsernameLogin':{
-        state.validatesLogin.errorUsers.username=''
+      case 'okUsernEmailLogin':{
+        state.validatesLogin.errorUsers.email=''
         state.response_api.login.failed=false
         break
       }
