@@ -96,18 +96,78 @@ export default {
   reset_data_component_login({ commit }) {
     commit('RESET_DATA_COMPONENT_LOGIN')
   },
-  send_code_to_email({commit},payload){
-    let email=new FormData();
-    email.append('email',payload);
-    ApiService.post('account/loginWithEmail',email,{
+  send_codeLogin_to_email({ commit }, payload) {
+    let loader = Vue.$loading.show({
+      container: null,
+      canCancel: false,
+      onCancel: this.yourCallbackMethod,
+      color: "#000000",
+      loader: "spinner",
+      width: 64,
+      height: 64,
+      backgroundColor: "#C0C0C1",
+      opacity: 0.5,
+      zIndex: 999,
+    });
+    let email = new FormData();
+    email.append('email', payload);
+    ApiService.post('account/loginWithEmail', email, {
       headers: {
         'X-Request-With': 'XMLHttpRequest'
       }
-    }).then(response=>{
-      console.log(response)
-    }).catch(error=>{
+    }).then(response => {
+      if (response.status === 200) {
+        loader.hide();
+        Vue.notify({
+          group: 'foo',
+          type: 'success',
+          text: response.data.result,
+        })
+        commit('LOGIN_WITH_EMAIL', true);
+      }
+    }).catch(error => {
       console.log(error)
     })
+  },
+  login_with_email({ commit }, form) {
+    let loader = Vue.$loading.show({
+      container: null,
+      canCancel: false,
+      onCancel: this.yourCallbackMethod,
+      color: "#000000",
+      loader: "spinner",
+      width: 64,
+      height: 64,
+      backgroundColor: "#C0C0C1",
+      opacity: 0.5,
+      zIndex: 999,
+    });
+    ApiService.post('account/doLoginWithEmail', form, {
+      headers: {
+        'X-Request-With': 'XMLHttpRequest'
+      }
+    })
+      .then(response => {
+        // console.log(response);
+        if (response.status === 200 && response.data.success) {
+          loader.hide();
+          localStorage.setItem('token', response.data.token)
+          commit('SELECT_DATA_USER', response.data)
+          Vue.notify({
+            group: 'foo',
+            type: 'success',
+            text: response.data.success,
+          })
+          let date = new Date();
+          let expired_date = date.setHours(date.getHours() + 4)
+          localStorage.setItem('user_date_expired_at', expired_date)
+          commit('change_response_api_login', response.data)
+          router.push({ path: '/' })
+        }
+      }).catch(error => {
+        loader.hide();
+        commit('change_response_api_login', error.response.data);
+      })
   },
   login({ commit }, form) {
     let loader = Vue.$loading.show({
@@ -147,7 +207,6 @@ export default {
       })
       .catch(error => {
         loader.hide();
-        console.log(error.response)
         commit('change_response_api_login', error.response.data)
       })
   },

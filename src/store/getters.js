@@ -39,7 +39,7 @@ export default {
     if(id ==='all'){
       return state.casses
     }else{
-      let arr=new Array()
+      let arr=new Array();
       state.casses.forEach(function(casse,index){
         if(casse.category == id){
           arr[index]=casse

@@ -11,32 +11,54 @@
         <img src="../../../assets/close-window-16.png" alt="" />
       </router-link>
       <form @submit.prevent="login()">
-        <fieldset>
+        <fieldset class="text-right">
           <legend align="right">ورود</legend>
-          <div class="form-group text-right p-2">
+          <div class="form-group p-2">
             <div class="form-group">
-              <label class="pt-1">نام کاربری:</label>
+              <label for="email" class="pt-1">ایمیل:</label>
               <input
-                v-model="form.username"
-                @input="checkValidate(form.username, 'username')"
-                name="username"
+                v-model="form.email"
+                @input="checkValidate(form.email, 'email')"
+                name="email"
                 type="text"
-                id="username"
+                id="email"
                 :class="[
-                  inValidate.username ? 'is-invalid' : null,
-                  validate.username ? 'is-valid' : null,
+                  inValidate.email ? 'is-invalid' : null,
+                  validate.email ? 'is-valid' : null,
                   'form-control',
                 ]"
                 placeholder="نام کاربری را وارد کنید..."
               />
               <small
                 class="disabled text-danger"
-                v-show="validatesLogin.errorUsers.username"
-                v-text="validatesLogin.errorUsers.username"
+                v-show="validatesLogin.errorUsers.email"
+                v-text="validatesLogin.errorUsers.email"
               ></small>
             </div>
+            <div
+              v-show="response_api.login.failed"
+              v-text="response_api.login.failed"
+              class="alert alert-danger"
+            ></div>
+            <input
+              v-show="!response_api.login.withEmail"
+              class="btn btn-success mt-3 mr-1"
+              :disabled="btnStatus"
+              type="submit"
+              value="ادامه"
+            />
+            <!--                        <input type="hidden" v-model="form.csrf_token" >-->
+          </div>
+        </fieldset>
+      </form>
+      <form
+        v-show="response_api.login.withEmail"
+        @submit.prevent="do_loginWithEmail()"
+      >
+        <fieldset class="text-right">
+          <div class="form-group p-2">
             <div class="form-group">
-              <label class="pt-1">رمز عبوری:</label>
+              <label class="pt-1 text-warning">رمزی که به ایمیلتان ارسال شده است را وارد کنید</label>
               <input
                 v-model="form.password"
                 @input="checkValidate(form.password, 'password')"
@@ -56,27 +78,21 @@
                 v-text="validatesLogin.errorUsers.password"
               ></small>
             </div>
-            <div class="form-check mt-3">
-              <label>من را بخاطر بسپار:</label>
-              <input
-                type="checkbox"
-                class="form-check-input"
-                v-model="form.remember"
-              /><br />
-            </div>
-            <div
-              v-show="response_api.login.failed"
-              v-text="response_api.login.failed"
-              class="alert alert-danger"
-            ></div>
-            <input
-              class="btn btn-success mt-3 mr-1"
-              :disabled="btnStatus"
-              type="submit"
-              value="ورود"
-            />
-            <!--                        <input type="hidden" v-model="form.csrf_token" >-->
           </div>
+          <div class="form-check mt-3">
+            <label>من را بخاطر بسپار:</label>
+            <input
+              type="checkbox"
+              class="form-check-input"
+              v-model="form.remember"
+            /><br />
+          </div>
+          <input
+            class="btn btn-success mt-3 mr-1"
+            :disabled="btnStatus2"
+            type="submit"
+            value="ورود"
+          />
         </fieldset>
       </form>
     </div>
@@ -94,19 +110,20 @@ export default {
   data() {
     return {
       form: new Form({
-        username: "",
+        email: "",
         password: "",
         remember: false,
       }),
       validate: {
-        username: null,
+        email: null,
         password: null,
       },
       inValidate: {
-        username: null,
+        email: null,
         password: null,
       },
       btnStatus: true,
+      btnStatus2: true,
     };
   },
   beforeCreate() {
@@ -128,23 +145,22 @@ export default {
     },
   },
   methods: {
-    checkValidate(x, id) {
+    checkValidate(x,id) {
       if (x === "") {
         let el = document.getElementById(id);
         el.classList.remove("is-invalid");
       } else {
         switch (x) {
-          case this.form.username: {
-            const res = x.match(
-              this.$store.state.regularExpression.regUsername
-            );
+          case this.form.email: {
+            this.$store.commit('LOGIN_WITH_EMAIL',false);
+            const res = x.match(this.$store.state.regularExpression.regEmail);
             if (res) {
-              this.validate.username = true;
-              this.inValidate.username = false;
-              this.$store.dispatch("changeValidate", "okUsernameLogin");
+              this.validate.email = true;
+              this.inValidate.email = false;
+              // this.$store.dispatch("changeValidate", "okUsernameLogin");
             } else {
-              this.validate.username = false;
-              this.inValidate.username = true;
+              this.validate.email = false;
+              this.inValidate.email = true;
             }
             break;
           }
@@ -164,13 +180,14 @@ export default {
           }
         }
       }
-      this.btnStatus = !(
-        this.validate.username === true &&
-        this.validate.password === true
-      );
+      this.btnStatus = !(this.validate.email === true);
+      this.btnStatus2 = !(this.validate.password === true);
     },
     login() {
-      this.$store.dispatch("login", this.form);
+      this.$store.dispatch("send_codeLogin_to_email", this.form.email);
+    },
+    do_loginWithEmail() {
+      this.$store.dispatch('login_with_email',this.form);
     },
   },
 };

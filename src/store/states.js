@@ -44,6 +44,7 @@ export default {
     services: false,
     category: false,
     login: {
+      withEmail:false,
       result: false,
       failed: '',
       success: '',

@@ -66,6 +66,9 @@ export default {
       state.response_api.login.successCallbackLogin=false
     }
   },
+  LOGIN_WITH_EMAIL(state,payload){
+    state.response_api.login.withEmail=payload;
+  },
   changeValidate (state, payload) {
     if(payload.name){
       state.validatesRegister.isValidated.name = false
