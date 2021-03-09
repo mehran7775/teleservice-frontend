@@ -27,7 +27,7 @@
                   validate.email ? 'is-valid' : null,
                   'form-control',
                 ]"
-                placeholder="نام کاربری را وارد کنید..."
+                placeholder="ایمیل را وارد کنید..."
               />
               <small
                 class="disabled text-danger"
@@ -35,11 +35,6 @@
                 v-text="validatesLogin.errorUsers.email"
               ></small>
             </div>
-            <div
-              v-show="response_api.login.failed"
-              v-text="response_api.login.failed"
-              class="alert alert-danger"
-            ></div>
             <input
               v-show="!response_api.login.withEmail"
               class="btn btn-success mt-3 mr-1"
@@ -58,7 +53,9 @@
         <fieldset class="text-right">
           <div class="form-group p-2">
             <div class="form-group">
-              <label class="pt-1 text-warning">رمزی که به ایمیلتان ارسال شده است را وارد کنید</label>
+              <label class="pt-1 text-warning"
+                >رمزی که به ایمیلتان ارسال شده است را وارد کنید</label
+              >
               <input
                 v-model="form.password"
                 @input="checkValidate(form.password, 'password')"
@@ -79,6 +76,11 @@
               ></small>
             </div>
           </div>
+           <div
+            v-show="response_api.login.failed"
+            v-text="response_api.login.failed"
+            class="alert alert-danger"
+          ></div>
           <div class="form-check mt-3">
             <label>من را بخاطر بسپار:</label>
             <input
@@ -145,14 +147,14 @@ export default {
     },
   },
   methods: {
-    checkValidate(x,id) {
+    checkValidate(x, id) {
       if (x === "") {
         let el = document.getElementById(id);
         el.classList.remove("is-invalid");
       } else {
         switch (x) {
           case this.form.email: {
-            this.$store.commit('LOGIN_WITH_EMAIL',false);
+            this.$store.commit("LOGIN_WITH_EMAIL", false);
             const res = x.match(this.$store.state.regularExpression.regEmail);
             if (res) {
               this.validate.email = true;
@@ -187,7 +189,7 @@ export default {
       this.$store.dispatch("send_codeLogin_to_email", this.form.email);
     },
     do_loginWithEmail() {
-      this.$store.dispatch('login_with_email',this.form);
+      this.$store.dispatch("login_with_email", this.form);
     },
   },
 };
